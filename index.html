@@ -103,13 +103,17 @@
       memberName.textContent = nameInput.value || "—";
     };
     document.querySelector(".download").onclick = () => {
-      html2canvas(document.getElementById("loyaltyCard")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "loyalty_card.png";
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    };
+  html2canvas(document.getElementById("loyaltyCard"), { 
+    useCORS: true,
+    allowTaint: true 
+  }).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "loyalty_card.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+};
+
     document.querySelector(".genid").onclick = () => {
       memberId = generateId();
       document.getElementById("memberId").textContent = memberId;
