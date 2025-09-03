@@ -82,8 +82,8 @@
       renderStamps();
     };
 
-    let memberId = generateId();
-    document.getElementById("memberId").textContent = memberId;
+    let memberIdInput = generateId();
+    document.getElementById("memberIdInput").textContent = memberIdInput;
 
     const nameInput = document.getElementById("nameInput");
     const memberName = document.getElementById("memberName");
@@ -133,13 +133,13 @@
 };
 
     document.querySelector(".genid").onclick = () => {
-      memberId = generateId();
-      document.getElementById("memberId").textContent = memberId;
+      memberIdInput = generateId();
+      document.getElementById("memberIdInput").textContent = memberIdInput;
     };
     document.querySelector(".reset").onclick = () => {
       stampCount = 0;
-      memberId = generateId();
-      document.getElementById("memberId").textContent = memberId;
+      memberIdInput = generateId();
+      document.getElementById("memberIdInput").textContent = memberIdInput;
       nameInput.value = "";
       memberName.textContent = "—";
       renderStamps();
