@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kartu Stamp Novan Kitchen</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; padding:20px; }
+    .card {
+      width: 400px; margin:auto; background:#fff; border-radius:15px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1); padding:20px;
+    }
+    .header { display:flex; justify-content:space-between; align-items:center; }
+    .brand { font-size:20px; font-weight:bold; color:#2b8a3e; display:flex; align-items:center; gap:10px; }
+    .brand img { height:40px; width:auto; border-radius:8px; }
+    .member { margin-top:10px; }
+    .stamps { display:grid; grid-template-columns: repeat(5,1fr); gap:10px; margin-top:20px; }
+    .stamp {
+      height:60px; border:2px solid #2b8a3e; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:24px; color:#ccc; background:#fafafa;
+    }
+    .stamp.filled { background:#2b8a3e; color:#fff; }
+    .controls { margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+    button {
+      padding:8px 12px; border:none; border-radius:8px;
+      cursor:pointer; font-weight:bold;
+    }
+    .add { background:#2b8a3e; color:white; }
+    .remove { background:#ccc; }
+    .redeem { background:#f59f00; color:white; }
+    .download { background:#228be6; color:white; }
+    .genid { background:#20c997; color:white; }
+    .reset { background:#e03131; color:white; }
+    input { padding:8px; border:1px solid #ccc; border-radius:8px; }
+  </style>
+</head>
+<body>
+  <div class="card" id="loyaltyCard">
+    <div class="header">
+      <div class="brand">
+        <img src="https://i.ibb.co/DfLgj2B/logo-novan-kitchen.png" alt="Novan Kitchen Logo"/>
+        Novan Kitchen
+      </div>
+      <div class="id">ID: <span id="memberId"></span></div>
+    </div>
+    <div class="member">Nama: <span id="memberName">—</span></div>
+    <div class="stamps" id="stamps"></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="nameInput" placeholder="Nama Member"/>
+    <button class="genid">Generate ID</button>
+    <button class="add">+ Stamp</button>
+    <button class="remove">- Stamp</button>
+    <button class="redeem" style="display:none;">Redeem</button>
+    <button class="download">Download</button>
+    <button class="reset">Reset</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    function generateId() {
+      return Math.random().toString(36).substring(2,8).toUpperCase();
+    }
+
+    let memberId = generateId();
+    document.getElementById("memberId").textContent = memberId;
+
+    const nameInput = document.getElementById("nameInput");
+    const memberName = document.getElementById("memberName");
+    const stampsEl = document.getElementById("stamps");
+    const redeemBtn = document.querySelector(".redeem");
+
+    let stampCount = 0;
+
+    function renderStamps() {
+      stampsEl.innerHTML = "";
+      for (let i=0; i<10; i++) {
+        const div = document.createElement("div");
+        div.className = "stamp" + (i<stampCount ? " filled" : "");
+        div.textContent = i<stampCount ? "🍜" : i+1;
+        stampsEl.appendChild(div);
+      }
+      redeemBtn.style.display = stampCount >= 10 ? "inline-block" : "none";
+    }
+
+    renderStamps();
+
+    document.querySelector(".add").onclick = () => {
+      if (stampCount < 10) { stampCount++; renderStamps(); }
+    };
+    document.querySelector(".remove").onclick = () => {
+      if (stampCount > 0) { stampCount--; renderStamps(); }
+    };
+    redeemBtn.onclick = () => {
+      if (stampCount >= 10) {
+        alert("Selamat! Anda mendapat hadiah 🎁");
+        stampCount = 0; renderStamps();
+      }
+    };
+    nameInput.oninput = () => {
+      memberName.textContent = nameInput.value || "—";
+    };
+    document.querySelector(".download").onclick = () => {
+      html2canvas(document.getElementById("loyaltyCard")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "loyalty_card.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    };
+    document.querySelector(".genid").onclick = () => {
+      memberId = generateId();
+      document.getElementById("memberId").textContent = memberId;
+    };
+    document.querySelector(".reset").onclick = () => {
+      stampCount = 0;
+      memberId = generateId();
+      document.getElementById("memberId").textContent = memberId;
+      nameInput.value = "";
+      memberName.textContent = "—";
+      renderStamps();
+    };
+  </script>
+</body>
+</html>
