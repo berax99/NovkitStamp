@@ -42,7 +42,9 @@
         <img src="logo.png" alt="Novan Kitchen Logo"/>
         Novan Kitchen
       </div>
-      <div class="id">ID: <span id="memberId"></span></div>
+      <div class="id">
+        ID: <input type="text" id="memberIdInput" value="" style="width:100px; padding:4px; border:1px solid #ccc; border-radius:5px;"/>
+      </div>
     </div>
     <div class="member">Nama: <span id="memberName">—</span></div>
     <div class="stamps" id="stamps"></div>
@@ -60,9 +62,25 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
+
     function generateId() {
       return Math.random().toString(36).substring(2,8).toUpperCase();
     }
+    
+    const idInput = document.getElementById("memberIdInput");
+    idInput.value = generateId(); // default generate
+    
+    document.querySelector(".genid").onclick = () => {
+      idInput.value = generateId();
+    };
+    
+    document.querySelector(".reset").onclick = () => {
+      stampCount = 0;
+      idInput.value = generateId();
+      nameInput.value = "";
+      memberName.textContent = "—";
+      renderStamps();
+    };
 
     let memberId = generateId();
     document.getElementById("memberId").textContent = memberId;
